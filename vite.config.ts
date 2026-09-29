@@ -18,5 +18,5 @@ export default defineConfig({
       workbox: { navigateFallback: 'index.html' }
     })
   ],
-  base: './'
+    base: '/Next-Lap/'
 })
