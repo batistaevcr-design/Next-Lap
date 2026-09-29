@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Next Lap</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#061F44;--blue:#4267FF;--purple:#7357C8;--lav:#C9C7F6;--steel:#DDE3F0;--white:#F7F5FC;--coral:#FF6B6B;--yel:#F3D66B;--bg:#e9edf6;--mut:#6b7590;--line:#dde3f0;--hand:'Caveat','Segoe Script',cursive;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#030d1f}}
+:root[data-theme="dark"]{--bg:#030d1f}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}body{background:var(--bg);font-family:var(--sans);color:#0F0F0F;display:flex;justify-content:center}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}input{font:inherit}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.d{position:absolute;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#app{width:100%;max-width:430px;height:100%;position:relative;overflow:hidden;background:var(--white)}
+.scr{position:absolute;inset:0 0 78px;overflow-y:auto;overflow-x:hidden;padding:20px 20px 30px}
+.full{inset:0;z-index:9}
+.paper{background:radial-gradient(at 12% 8%,#fff,transparent 45%),radial-gradient(at 95% 55%,#ebe9f7,transparent 50%),repeating-linear-gradient(72deg,#0000000a 0 1px,transparent 1px 23px),var(--white)}
+.dk{color:#fff;background:radial-gradient(at 25% 0%,#123a76,transparent 55%),repeating-linear-gradient(118deg,#ffffff0b 0 2px,transparent 2px 11px),radial-gradient(at 80% 100%,#0a2d63,transparent 60%),var(--navy)}
+.ck{position:absolute;pointer-events:none;background:conic-gradient(#f4f6fc 25%,#0a2a5c 0 50%,#f4f6fc 0 75%,#0a2a5c 0) 0 0/16px 16px;-webkit-mask:linear-gradient(135deg,#000 45%,transparent 95%);mask:linear-gradient(135deg,#000 45%,transparent 95%)}
+.hand{font-family:var(--hand);font-weight:700}
+.ph{background:#dfe5f1;border:1px solid #c9d2e6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#7a86a3;font-size:11px;background-size:cover;background-position:center;position:relative;cursor:pointer}
+.ph.has{color:transparent}.ph input{display:none}
+.pol{background:#fbfaff;padding:9px 9px 13px;box-shadow:0 6px 16px rgba(6,31,68,.22);position:relative;width:100%}
+.pol .ph{aspect-ratio:1/1}.pol b{display:block;font-family:var(--hand);font-size:22px;margin-top:5px;color:var(--navy);line-height:1}.pol small{color:var(--mut);font-size:11px}
+.tape{position:absolute;top:-9px;left:50%;width:62px;height:20px;margin-left:-31px;background:rgba(224,216,190,.8);transform:rotate(-3deg);z-index:2}
+.nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;padding:0 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:12}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:#8a94ad;width:60px}.nav button.on{color:var(--blue)}
+.nav .plus{width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;justify-content:center;margin-top:-16px;box-shadow:0 6px 14px rgba(6,31,68,.35)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:relative;z-index:2}
+.back{width:36px;height:36px;display:flex;align-items:center}
+.btn{display:block;width:100%;height:52px;border-radius:26px;background:var(--navy);color:#fff;font-weight:600;font-size:15px}.btn.w{background:#fff;color:var(--navy)}
+.btn.o{background:transparent;border:1.5px solid var(--blue);color:var(--blue);height:40px;width:auto;padding:0 30px;font-size:13px;border-radius:20px}
+.chip{padding:8px 16px;border-radius:20px;background:var(--steel);font-size:13px;color:var(--navy);white-space:nowrap}.chip.on{background:var(--navy);color:#fff}
+.row{display:flex;gap:10px;align-items:center}
+.av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;background-size:cover;background-position:center;flex:none}
+.av.E{background-color:var(--blue)}.av.J{background-color:var(--purple)}
+.note{font-family:var(--hand);font-weight:700;color:var(--navy);background:#f3eedf;padding:10px 14px;box-shadow:0 4px 10px rgba(0,0,0,.25);font-size:22px;line-height:1.05;position:absolute}
+.card{border:1.5px dashed #7d93e6;border-radius:6px;background:#eef1fa;position:relative}
+.field{width:100%;border:0;border-bottom:1.5px solid var(--line);background:transparent;padding:10px 2px;font-size:15px;outline:0}.field:focus{border-color:var(--blue)}
+.lab{font-size:13px;font-weight:600;margin:18px 0 9px;display:block}
+.cats{display:flex;gap:14px}.cat{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--mut)}
+.cat span{width:50px;height:50px;border-radius:12px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--navy)}.cat.on span{background:var(--blue);color:#fff;border-color:var(--blue)}
+.sk{background:#e6eaf3;border-radius:4px;height:9px}
+.stat{display:flex;background:#fffc;padding:12px 4px;margin-top:8px;box-shadow:0 2px 10px rgba(6,31,68,.08)}.stat div{text-align:center;flex:1}.stat b{display:block;font-family:var(--serif);font-size:19px}.stat span{font-size:10px;color:var(--mut)}
+.set{display:flex;align-items:center;gap:12px;width:100%;padding:14px 0;border-bottom:1px solid var(--line);text-align:left}.set div{flex:1}.set b{font-size:14px;display:block}.set small{color:var(--mut);font-size:12px}
+.sw{display:flex;gap:12px;margin:12px 0 24px}.sw span{width:40px;height:40px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.dc{padding:8px 15px;border-radius:20px;border:1px solid #ffffff55;color:#fff;font-size:13px}.dc.on{background:#fff;color:var(--navy);border-color:#fff}
+.splash-inner{position:absolute;inset:0;display:flex;flex-direction:column;padding:22px 22px 20px;z-index:2;overflow:hidden;color:#0d2145}
+.splash-inner:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 34%,rgba(255,255,255,.34),transparent 42%),linear-gradient(180deg,rgba(246,248,255,.08),rgba(18,38,75,.16));z-index:-3;pointer-events:none}
+.splash-inner:after{content:"";position:absolute;left:-8%;right:-8%;bottom:-4%;height:46%;background:linear-gradient(to bottom,transparent 0%,rgba(6,31,68,.04) 20%,rgba(6,31,68,.24) 100%);z-index:-2;pointer-events:none}
+.splash-head{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:100%;height:46%;position:relative}
+.splash-corner{position:absolute;top:0;left:0;display:flex;align-items:center;gap:0;z-index:3}
+.splash-corner .av{border:2px solid rgba(255,255,255,.82);box-shadow:0 4px 12px rgba(6,31,68,.14)}
+.splash-corner .av+ .av{margin-left:-10px}
+.splash-corner .tiny{width:22px;height:22px;margin-left:11px;color:#4267ff}
+.splash-corner .tiny.j{color:#7357c8;margin-left:7px}
+.splash-mark{width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:#102d59;margin:24px 0 7px;opacity:.9;filter:drop-shadow(0 2px 4px rgba(255,255,255,.7))}
+.splash-logo{font-family:var(--hand);font-weight:700;font-size:72px;line-height:.68;font-style:italic;letter-spacing:1px;text-align:center;transform:rotate(-4deg);color:#061f44;text-shadow:0 2px 0 rgba(255,255,255,.65),0 5px 12px rgba(6,31,68,.12);margin-top:2px}
+.splash-stamp{margin-top:13px;font-family:var(--serif);font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:#52617a;padding:4px 10px;border-top:1px solid rgba(6,31,68,.18);border-bottom:1px solid rgba(6,31,68,.12);transform:rotate(-1deg);background:rgba(255,255,255,.28)}
+.splash-side{position:absolute;right:2px;top:4px;display:flex;flex-direction:column;align-items:center;gap:12px;color:#4267ff}
+.splash-side .mini{width:20px;height:20px}
+.splash-side .mini.p{color:#7357c8}
+.splash-quotes{width:100%;max-width:360px;margin-top:auto;margin-bottom:64px;display:flex;flex-direction:column;gap:18px;position:relative;z-index:2}
+.splash-quote{position:relative;display:flex;align-items:flex-start;color:#071d40;padding:0 8px 0 2px;text-shadow:0 1px 0 rgba(255,255,255,.72)}
+.splash-quote .qbody{flex:1;position:relative;padding:2px 6px 8px}
+.splash-quote .qbody:after{content:"";position:absolute;left:-6px;right:4px;bottom:0;height:7px;border-radius:2px;opacity:.42;transform:rotate(-1deg);z-index:-1}
+.splash-quote.e .qbody:after{background:#a9b9ff}.splash-quote.j .qbody:after{background:#c7b9f4}
+.splash-quote .qi{width:17px;height:17px;position:absolute;right:6px;top:-1px;opacity:.82}
+.splash-quote.e .qi{color:#4267ff}.splash-quote.j .qi{color:#7357c8}
+.splash-quote .q{font-family:var(--hand);font-size:25px;line-height:1.08;font-weight:700;max-width:300px}
+.splash-quote.e .q{transform:rotate(-1deg)}.splash-quote.j .q{transform:rotate(1deg)}
+.splash-enter{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;color:#14315d;font-size:11px;letter-spacing:.4px}
+.splash-enter .splash-cta{position:static;width:48px;height:48px;border-radius:50%;border:1.5px solid #4267ff;background:rgba(255,255,255,.42);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;color:#4267ff;box-shadow:0 6px 16px rgba(6,31,68,.12)}
+.splash-enter .splash-cta .i{width:19px;height:19px}
+.splash-doodle{position:absolute;pointer-events:none;opacity:.8}
+@media(max-height:650px){.splash-inner{padding-top:18px}.splash-head{height:44%}.splash-mark{margin-top:14px}.splash-logo{font-size:62px}.splash-quotes{margin-bottom:58px;gap:11px}.splash-quote .q{font-size:21px}.splash-enter{bottom:12px}}
+</style></head><body><div id="app"></div>
+<script>
+const P={home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',mural:'<rect x="4" y="4" width="16" height="13" rx="2"/><path d="M8 21l4-4 4 4"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/>',plus:'<path d="M12 5v14M5 12h14"/>',cam:'<rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.5"/><path d="M9 7l1.5-3h3L15 7"/>',bm:'<path d="M6 4h12v17l-6-4-6 4z"/>',chev:'<path d="M9 5l7 7-7 7"/>',back:'<path d="M15 5l-7 7 7 7"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pin:'<path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',arr:'<path d="M5 12h14M13 6l6 6-6 6"/>',fork:'<path d="M7 3v8a2 2 0 004 0V3M9 11v10M17 3c-2 2-2 6 0 8v10"/>',glass:'<path d="M6 4h12l-6 8zM12 12v8M8 20h8"/>',leaf:'<path d="M5 19c0-9 5-14 15-14 0 10-5 15-15 15zM5 19l8-8"/>',mask:'<path d="M4 5h16v6a8 8 0 01-16 0z"/><path d="M8 11h2M14 11h2M9 15c2 1.5 4 1.5 6 0"/>',crown:'<path d="M4 18l-1-11 5 4 4-7 4 7 5-4-1 11z"/>',sett:'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>',pen:'<path d="M4 20l1-5L16 4l4 4L9 19zM14 6l4 4"/>',mk:'<path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/>'};
+const D={star:'<path d="M12 3l2.6 5.6 6 .7-4.4 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.4 9.3l6-.7z"/>',spark:'<path d="M12 2c.6 5 2.4 8 8 10-5.6 2-7.4 5-8 10-.6-5-2.4-8-8-10 5.6-2 7.4-5 8-10z"/>',heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 018-2.5A4.5 4.5 0 0120 9c0 6-8 11-8 11z"/>',sq:'<path d="M2 12c3-6 5 6 8 0s5 6 8 0 3 4 4 2"/>',ar:'<path d="M3 20c6-2 10-8 15-13M12 6l6 1-1 6"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 10a6 6 0 0012 0M12 16v5M8.5 21h7"/>',crown:'<path d="M4 18l-1-11 5 4 4-7 4 7 5-4-1 11zM4 21h16"/>',flag:'<rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>'};
+const ic=n=>`<svg class="i" viewBox="0 0 24 24">${P[n]}</svg>`;
+const dd=(n,x,y,s,c,r=0)=>`<svg class="d" viewBox="0 0 24 24" style="left:${x};top:${y};width:${s}px;height:${s}px;color:${c};transform:rotate(${r}deg)">${D[n]}</svg>`;
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CATS=[['Comer','fork'],['Beber','glass'],['Passear','leaf'],['Cultura','mask']];
+const newD=()=>({t:'',l:'',c:'Comer',w:'Em breve',by:['E','J'],p:'',want:3,imp:2,cmin:'',cmax:'',dur:''});
+let S={sf:{b:4,t:5,low:false},seen:[],splash:1,tab:'home',sub:'',items:[],prof:{E:{n:'Evy',s:'Quero fazer algo diferente.',p:'',likes:['Ama formas, café e boa comida','Ama música, esportes e viagens','Sonha com o mar todos os dias']},J:{n:'JP',s:'Qualquer lugar com comida boa.',p:'',likes:['Ama tecnologia, games e filmes','Curte esportes e boa companhia','Sempre em busca de novas histórias']}},cover:'',ccolor:'',splashCover:'',splashColor:'#eaf0ff',cat:'Todos',q:'',who:'E',sel:null,sur:null,f:'Tudo',d:newD()};
+try{const j=localStorage.getItem('nl10');if(j)Object.assign(S,JSON.parse(j),{splash:1,sub:''})}catch(e){}
+const save=()=>{try{localStorage.setItem('nl10',JSON.stringify({items:S.items,prof:S.prof,cover:S.cover,ccolor:S.ccolor,splashCover:S.splashCover,splashColor:S.splashColor}))}catch(e){}};
+const $=document.getElementById('app');const go=o=>{Object.assign(S,o);draw()};
+const photo=(src,kind='',arg='',label='Adicionar foto',st='')=>`<label class="ph ${src?'has':''}" style="${st};${src?`background-image:url(${src})`:''}">${src?'':ic('cam')+(label?`<span>${label}</span>`:'')}<input type="file" accept="image/*" onchange="pick(event,'${kind}','${arg}')"></label>`;
+function pick(e,k,a){const f=e.target.files[0];if(!f||f.size>6e6)return;const r=new FileReader();r.onload=()=>{const v=r.result;if(k==='cover'){S.cover=v;S.ccolor=''}else if(k==='splash'){S.splashCover=v}else if(k==='draft')S.d.p=v;else if(k==='prof')S.prof[a].p=v;else if(k==='item'){const it=S.items.find(i=>i.id===a);if(it)it.p=v}save();draw()};r.readAsDataURL(f)}
+const nb=(t,i,l)=>`<button class="${S.tab===t&&!S.sub?'on':''}" onclick="go({tab:'${t}',sub:''})">${ic(i)}<span>${l}</span></button>`;
+const nav=()=>`<nav class="nav">${nb('home','home','Início')}${nb('mural','mural','Mural')}<button class="plus" onclick="go({sub:'add'})">${ic('plus')}</button>${nb('explore','search','Explorar')}${nb('profile','user','Perfil')}</nav>`;
+const back=(to,t,dark)=>`<div class="top"><button class="back" onclick="go({sub:'${to}'})">${ic('back')}</button><h2 style="font-family:var(--serif);font-size:20px;flex:1">${t}</h2></div>`;
+const avi=(k,s=44)=>`<div class="av ${k}" style="width:${s}px;height:${s}px;font-size:${s*.36}px;${S.prof[k].p?`background-image:url(${S.prof[k].p})`:''}">${S.prof[k].p?'':k==='E'?'E':'JP'}</div>`;
+
+function splash(){const bg=S.splashCover?`background:linear-gradient(180deg,rgba(240,244,255,.52) 0%,rgba(240,244,255,.16) 42%,rgba(6,31,68,.42) 100%),url(${S.splashCover}) center/cover no-repeat`:`background:${S.splashColor||'#eaf0ff'}`;return `<div class="scr full" style="padding:0;${bg}" onclick="go({splash:0})">
+<div class="splash-inner">
+<div class="splash-doodle" style="left:0;top:0;width:80px;height:80px;background:linear-gradient(135deg,rgba(66,103,255,.18),transparent 70%);transform:rotate(-8deg)"></div>
+<div class="splash-doodle" style="right:8px;top:10px">${dd('spark','0','0',18,'#4267ff',8)}</div>
+<div class="splash-doodle" style="left:8px;top:124px">${dd('star','0','0',17,'#4267ff',-8)}</div>
+<div class="splash-doodle" style="right:8px;top:176px">${dd('heart','0','0',18,'#7357c8',5)}</div>
+<div class="splash-head">
+<div class="splash-corner"><span>${avi('E',30)}</span><span>${avi('J',30)}</span><span class="tiny">${ic('spark')}</span><span class="tiny j">${ic('heart')}</span></div>
+<div class="splash-side"><span class="mini">${ic('mic')}</span><span class="mini p">${ic('star')}</span></div>
+<div class="splash-mark">${ic('mic')}</div><div class="splash-logo">NEXT<br>LAP</div><div class="splash-stamp">EVY × JP</div>
+</div>
+<div class="splash-quotes">
+<div class="splash-quote e"><div class="qbody"><div class="qi">${ic('spark')}</div><div class="q">“I need a change, and I need it fast.”</div></div></div>
+<div class="splash-quote j"><div class="qbody"><div class="qi">${ic('heart')}</div><div class="q">“We’re driving toward the morning sun.”</div></div></div>
+</div>
+<div class="splash-enter"><span>entrar</span><button class="splash-cta" aria-label="Entrar" onclick="event.stopPropagation();go({splash:0})">${ic('arr')}</button></div>
+</div></div>`}
+function home(){const up=S.items.filter(i=>i.w!=='Já vivemos').slice(0,3);
+const pc=k=>{const p=S.prof[k];return `<div style="flex:1;text-align:center"><div class="av ${k}" style="width:78px;height:78px;font-size:30px;margin:0 auto 8px;${p.p?`background-image:url(${p.p})`:''}">${p.p?'':k==='E'?'E':'JP'}</div><b style="font-size:14px">${p.n} <span style="color:${k==='E'?'var(--blue)':'var(--purple)'};font-size:10px">●</span></b><div style="font-size:11.5px;color:var(--mut);margin-top:3px;padding:0 6px">“${esc(p.s)}”</div></div>`};
+return `<div class="scr paper"><div class="top" style="align-items:flex-start;margin-bottom:8px"><div><div class="hand" style="font-size:34px;line-height:.9;font-style:italic;color:var(--navy);transform:rotate(-3deg)">NEXT LAP,</div><div class="hand" style="font-size:31px;line-height:1;color:var(--navy);transform:rotate(-3deg);margin-top:4px">A próxima volta<br>começa aqui. <span style="color:var(--blue);font-size:22px">〰</span></div></div><div class="row" style="gap:0">${avi('E',34)}<span style="margin-left:-9px">${avi('J',34)}</span></div></div>
+<div class="row" style="align-items:flex-start;margin:22px 0 24px">${pc('E')}<div style="width:1px;align-self:stretch;background:var(--line)"></div>${pc('J')}</div>
+<b style="font-size:15px">Em destaque pra vocês</b>
+<div class="card" style="margin:10px 0 24px;height:170px;${S.ccolor?'background:'+S.ccolor:''}" onclick="surprise()"><div class="tape" style="left:9%;transform:rotate(-38deg)"></div><div class="tape" style="left:92%;transform:rotate(38deg)"></div><div style="position:absolute;inset:0;border-radius:6px;${S.cover?`background:url(${S.cover}) center/cover`:''}display:flex;align-items:center;justify-content:center;padding-bottom:34px;color:#7a86a3;flex-direction:column;gap:6px">${S.cover?'':ic('cam')}</div><div style="position:absolute;left:14px;bottom:12px;right:60px;${S.cover?'color:#fff;text-shadow:0 1px 6px #0009':'color:var(--navy)'}"><b style="display:block;font-size:15px">Surpreenda a gente</b><small style="font-size:12px;opacity:.85">Qual será a próxima?</small></div><span style="position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--navy)">${ic('arr')}</span></div>
+<b style="font-size:15px">O que vem por aí?</b>
+<div class="row" style="margin-top:14px;align-items:flex-start;gap:8px">${[0,1,2].map(n=>{const i=up[n];return `<div class="pol" style="transform:rotate(${[-2,1.5,-1.5][n]}deg);padding:6px 6px 16px" ${i?`onclick="open_('${i.id}')"`:''}><div class="tape" style="width:34px;margin-left:-17px;top:-7px"></div>${i?photo(i.p):`<div class="ph" style="aspect-ratio:1/1">${ic('cam')}</div>`}${i?`<b style="font-size:16px">${esc(i.t)}</b>`:''}</div>`}).join('')}</div>
+<div class="ck" style="right:-10px;bottom:-10px;width:80px;height:90px;transform:scaleX(-1) rotate(-8deg)"></div></div>`}
+
+function add(){const d=S.d;const inp=`background:#fbf8ee`;
+return `<div class="scr full paper" style="padding:0"><div style="height:270px;background:#1b1712;position:relative">${photo(d.p,'draft','','Adicionar foto','position:absolute;inset:0;background-color:#1b1712;border:0;color:#cfd6ea')}<button onclick="go({sub:''})" style="position:absolute;left:16px;top:16px;color:#fff;z-index:3">${ic('x')}</button><button onclick="saveItem()" style="position:absolute;right:16px;top:14px;background:#fff;border-radius:18px;padding:8px 18px;font-weight:600;font-size:13px;z-index:3">Salvar</button></div>
+<div style="padding:0 20px 20px;position:relative"><div style="margin:-38px 0 0;background:#fbf9f1;padding:14px 16px;box-shadow:0 6px 16px #0003;transform:rotate(-2deg);position:relative;z-index:2"><div class="tape" style="left:20%;top:-9px"></div><input style="font-family:var(--hand);font-weight:700;font-size:28px;border:0;outline:0;width:100%;background:transparent;color:var(--navy)" value="${esc(d.t)}" oninput="S.d.t=this.value"><div class="row" style="margin-top:4px;font-size:12px;color:var(--mut)">${ic('pin')}<input style="border:0;outline:0;background:transparent;font-size:12px;flex:1" placeholder="Adicionar localização" value="${esc(d.l)}" oninput="S.d.l=this.value"></div></div>
+<span class="lab">Categoria</span><div class="cats">${CATS.map(([c,i])=>`<button class="cat ${d.c===c?'on':''}" onclick="S.d.c='${c}';draw()"><span>${ic(i)}</span>${c}</button>`).join('')}</div>
+<span class="lab">Quando?</span><div class="row">${['Em breve','Já vivemos','Sem data'].map(w=>`<button class="chip ${d.w===w?'on':''}" onclick="S.d.w='${w}';draw()">${w}</button>`).join('')}</div>
+<span class="lab">Com quem?</span><div class="row">${['E','J'].map(k=>`<button class="chip ${d.by.includes(k)?'on':''}" style="display:flex;gap:6px;align-items:center;padding:4px 14px 4px 4px;${d.by.includes(k)?'':'background:#fff;border:1px solid var(--line)'}" onclick="tw('${k}')">${avi(k,26)}${S.prof[k].n}</button>`).join('')}<span class="chip" style="border-radius:50%;padding:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line)">${ic('plus')}</span></div>
+<span class="lab">Quanto queremos fazer isso?</span><div class="row" style="gap:6px;flex-wrap:wrap">${[1,2,3,4,5].map(n=>`<button class="chip ${d.want===n?'on':''}" style="padding:7px 9px" onclick="S.d.want=${n};draw()">${'🔥'.repeat(n)}</button>`).join('')}</div><small style="color:var(--mut);font-size:12px">${WL[d.want-1]}</small>
+<span class="lab">Importância</span><div class="row">${[['Baixa',1],['Média',2],['Alta',3]].map(([a,n])=>`<button class="chip ${d.imp===n?'on':''}" onclick="S.d.imp=${n};draw()">${a}</button>`).join('')}</div>
+<span class="lab">Custo estimado para o casal</span><div class="row"><input class="field" type="number" min="0" inputmode="numeric" placeholder="R$ mín" value="${d.cmin}" oninput="S.d.cmin=this.value"><span>–</span><input class="field" type="number" min="0" inputmode="numeric" placeholder="R$ máx" value="${d.cmax}" oninput="S.d.cmax=this.value"></div>
+<span class="lab">Duração</span><div class="row" style="flex-wrap:wrap;gap:8px">${DUR.map(([k,l])=>`<button class="chip ${d.dur===k?'on':''}" onclick="S.d.dur=S.d.dur==='${k}'?'':'${k}';draw()">${l}</button>`).join('')}</div><div style="height:30px"></div></div>
+<div class="ck" style="right:0;bottom:0;width:70px;height:80px;transform:scaleX(-1) rotate(-6deg)"></div></div>`}
+const tw=k=>{const a=S.d.by;S.d.by=a.includes(k)?a.filter(x=>x!==k):[...a,k];draw()};
+function saveItem(){const d=S.d;if(!d.t.trim()){alert('Dê um título para a experiência.');return}const nz=v=>v===''||v==null?null:+v;S.items.unshift({id:'i'+Date.now(),t:d.t.trim(),l:d.l,c:d.c,w:d.w,by:d.by,p:d.p,want:d.want,imp:d.imp,cmin:nz(d.cmin),cmax:nz(d.cmax),dur:d.dur,at:Date.now()});S.d=newD();S.sub='';S.tab='mural';save();draw()}
+
+const SL=[[4,10,44,-3],[52,4,44,2],[6,44,44,-2],[50,38,46,3],[26,72,46,-1]];
+function mural(){const n=Math.max(5,S.items.length),H=Math.ceil(n/5)*640+140;let h='';
+for(let k=0;k<n;k++){const s=SL[k%5],b=Math.floor(k/5)*640,i=S.items[k];h+=`<div style="position:absolute;left:${s[0]}%;top:${s[1]*6+b+30}px;width:${s[2]}%;transform:rotate(${s[3]}deg)" ${i?`onclick="open_('${i.id}')"`:''}><div class="pol" style="padding:8px 8px ${i?13:22}px"><div class="tape"></div>${i?photo(i.p):`<div class="ph">${ic('cam')}<span>Adicionar foto</span></div>`}${i?`<b>${esc(i.t)}</b><small>${esc(i.l||i.c)}</small>`:''}</div></div>`}
+return `<div class="scr dk" style="padding:20px 0 0"><div class="top" style="padding:0 20px"><button class="back" onclick="go({tab:'home'})">${ic('back')}</button><span class="hand" style="font-size:34px;flex:1;font-style:italic;transform:rotate(-3deg)">Nosso Mural</span><span style="color:var(--lav)">${ic('pen')}</span></div>${dd('spark','84%','9%',24,'#dbe4ff')}${dd('spark','90%','13%',16,'#dbe4ff')}
+<div style="position:relative;height:${H}px"><div class="note" style="left:52%;top:${4*6+8}px;transform:rotate(6deg);width:110px;top:250px;background:#f3eedf;left:26%;z-index:3;font-size:22px">Grandes planos ♡</div><div class="note" style="left:5%;top:400px;transform:rotate(-4deg);width:120px;z-index:3">Colecione momentos, não coisas.</div>${h}
+<div class="ck" style="left:0;bottom:60px;width:100px;height:100px;transform:rotate(90deg)"></div><div style="position:absolute;left:22px;bottom:70px;color:#dbe4ff;transform:rotate(-8deg);z-index:4"><svg class="i" style="width:70px;height:70px" viewBox="0 0 24 24">${P.cam}</svg></div></div>
+<button onclick="go({sub:'add'})" style="position:sticky;bottom:14px;float:right;margin:-70px 20px 0 0;width:56px;height:56px;border-radius:50%;background:var(--navy);border:2px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;z-index:6">${ic('plus')}</button></div>`}
+
+function explore(){const cs=['Todos','Comer','Beber','Passear','Cultura'];
+return `<div class="scr paper"><h1 style="font-family:var(--sans);font-weight:700;font-size:28px;margin:6px 0 14px">Explorar</h1><div class="row" style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 12px;color:var(--mut)">${ic('search')}<input class="field" style="border:0" placeholder="Buscar experiências, lugares..." value="${esc(S.q)}" oninput="S.q=this.value;dl()"></div>
+<div class="row" style="margin:14px 0;overflow-x:auto">${cs.map(c=>`<button class="chip ${S.cat===c?'on':''}" onclick="go({cat:'${c}'})">${c}</button>`).join('')}</div><div id="el">${exl()}</div></div>`}
+const flt=()=>S.items.filter(i=>(S.cat==='Todos'||i.c===S.cat)&&i.t.toLowerCase().includes(S.q.toLowerCase()));
+const exl=()=>{const l=flt();const card=(i)=>`<div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:14px" ${i?`onclick="open_('${i.id}')"`:''}>${i?photo(i.p,'','','Adicionar foto','height:120px;border-radius:6px'):`<div class="ph" style="height:120px;border-radius:6px">${ic('cam')}<span>Adicionar foto</span></div>`}<div class="row" style="margin-top:10px"><div style="flex:1">${i?`<b style="font-size:14px">${esc(i.t)}</b><div style="font-size:12px;color:var(--mut)">${i.c}${i.l?' · '+esc(i.l):''}</div>`:`<div class="sk" style="width:55%;margin-bottom:8px"></div><div class="sk" style="width:35%;height:7px"></div>`}</div><span style="color:var(--navy)">${ic('bm')}</span></div></div>`;return l.length?l.map(card).join(''):(S.items.length?'':[0,1,2].map(()=>card()).join(''))};
+const dl=()=>document.getElementById('el').innerHTML=exl();
+
+function profile(){const k=S.who,p=S.prof[k],E=k==='E',ac=E?'var(--blue)':'var(--purple)';const n=S.items.length,v=S.items.filter(i=>i.w==='Já vivemos').length,pl=new Set(S.items.map(i=>i.l).filter(Boolean)).size;
+const bg=E?'radial-gradient(at 0 0,#b9caff,transparent 45%),radial-gradient(at 100% 40%,#dbe4ff,transparent 50%),#eef2ff':'radial-gradient(at 100% 0,#d5c6ff,transparent 50%),radial-gradient(at 0 60%,#e6dcff,transparent 55%),#f3eeff';
+const dc=E?[['star','6%','16%',26,'#4267ff'],['heart','86%','12%',22,'#4267ff'],['spark','5%','52%',22,'#4267ff'],['star','88%','36%',30,'#4267ff'],['ar','82%','48%',24,'#4267ff',20]]:[['heart','20%','5%',24,'#7357c8'],['star','6%','32%',30,'#7357c8'],['spark','88%','8%',20,'#7357c8'],['star','4%','52%',24,'#7357c8'],['spark','86%','52%',22,'#7357c8']];
+return `<div class="scr" style="background:${bg};text-align:center;padding-bottom:40px"><div class="top"><div class="row" style="gap:8px">${['E','J'].map(x=>`<button onclick="go({who:'${x}'})" style="opacity:${S.who===x?1:.45}">${avi(x,32)}</button>`).join('')}</div><button onclick="go({sub:'appearance'})" style="color:var(--navy)">${ic('sett')}</button></div>
+${E?'<div class="ck" style="left:0;top:0;width:90px;height:100px;opacity:.85"></div>':''}${dc.map(a=>dd(...a)).join('')}
+<div class="pol" style="width:215px;margin:12px auto 0;transform:rotate(-2deg)"><div class="tape" style="background:${E?'rgba(190,200,255,.8)':'rgba(201,180,255,.8)'}"></div>${photo(p.p,'prof',k)}</div>
+
+<div class="hand" style="font-size:40px;margin-top:16px;color:var(--navy);line-height:1">${p.n} <span style="color:${ac};font-size:18px">●</span></div><div class="hand" style="font-size:23px;color:var(--navy);line-height:1;margin-top:4px">“${esc(p.s)}”</div>
+<button class="btn o" style="margin:16px auto;display:block" onclick="go({sub:'appearance'})">Editar perfil</button>
+<div style="text-align:left"><b style="font-family:var(--serif);font-size:15px">Sobre mim</b>${p.likes.map((t,n)=>`<div class="row" style="margin-top:6px;color:#4a5573;gap:8px"><span style="color:${ac}">◎</span><input class="field" style="font-size:12.5px;padding:6px 2px" maxlength="60" value="${esc(t)}" oninput="S.prof['${k}'].likes[${n}]=this.value;save()"><button onclick="S.prof['${k}'].likes.splice(${n},1);save();draw()" style="color:#9aa4bd">${ic('x')}</button></div>`).join('')}${p.likes.length<5?`<button class="row" style="margin-top:8px;font-size:12.5px;color:${ac}" onclick="S.prof['${k}'].likes.push('');save();draw()">${ic('plus')}Adicionar</button>`:''}</div>
+<div style="text-align:left;margin-top:20px"><b style="font-family:var(--serif);font-size:15px">Nossa história</b><div class="stat">${[[n,'experiências'],[v,'vividas'],[pl,'lugares'],[n-v,'ainda']].map(([a,b])=>`<div><b>${a}</b><span>${b}</span></div>`).join('')}</div></div>
+<div class="hand" style="text-align:right;color:${ac};font-size:20px;margin-top:8px;line-height:1;transform:rotate(-3deg)">e o melhor...<br>vem por aí!</div>
+<button class="row" style="margin:14px auto 0;color:var(--navy);font-size:13px" onclick="go({sub:'activity'})">Atividade ${ic('chev')}</button></div>`}
+
+function activity(){const f=S.f;const l=S.items.filter(i=>f==='Tudo'||i.by.includes(f==='Evy'?'E':'J'));
+const row=(i,k)=>`<div class="row" style="padding:15px 0;border-bottom:1px solid var(--line)" ${i?`onclick="open_('${i.id}')"`:''}>${avi(k,42)}<div style="flex:1">${i?`<b style="font-size:13px">${S.prof[k].n} adicionou uma experiência</b><div style="color:var(--mut);font-size:12px;margin-top:2px">${esc(i.t)}</div>`:`<div class="sk" style="width:80%;margin-bottom:8px"></div><div class="sk" style="width:30%;height:7px"></div>`}</div><span style="color:#aab">${ic('chev')}</span></div>`;
+return `<div class="scr paper"><div class="top"><h1 style="font-family:var(--sans);font-weight:700;font-size:26px">Atividade</h1><span style="color:var(--blue)">${ic('crown')}</span></div><div class="row" style="margin-bottom:8px">${['Tudo','Evy','JP'].map(x=>`<button class="chip ${f===x?'on':''}" onclick="go({f:'${x}'})">${x}</button>`).join('')}</div>${l.length?l.map(i=>row(i,i.by[0]||'E')).join(''):(S.items.length?'':['E','J','E','J'].map(k=>row(0,k)).join(''))}</div>`}
+
+const open_=id=>{const i=S.items.find(x=>x.id===id);i.seen=Date.now();save();go({sel:i,sub:'detail'})};
+function detail(){const i=S.sel;return `<div class="scr full paper" style="padding-top:20px"><div class="top"><button class="back" onclick="go({sub:''})">${ic('back')}</button><span style="color:var(--blue)">${ic('crown')}</span><span style="color:var(--navy)">${ic('bm')}</span></div>${dd('star','6%','26%',26,'#4267ff')}${dd('spark','86%','14%',20,'#4267ff')}
+<div class="pol" style="width:76%;margin:6px auto 0;transform:rotate(-2deg)"><div class="tape"></div>${photo(i.p,'item',i.id)}</div>
+<div class="hand" style="font-size:38px;margin-top:22px;color:var(--navy);line-height:1">${esc(i.t)}</div><div class="row" style="margin:8px 0 14px;font-size:13px;color:var(--mut)">${ic('pin')}${esc(i.l||'')}</div>
+<div class="row"><span class="chip">${i.c}</span><span class="chip">${i.w}</span></div>
+<div style="position:absolute;left:20px;right:20px;bottom:24px"><button class="btn" onclick="live()">${i.w==='Já vivemos'?'Vivido ♡':i.w==='Planejado'?'Marcar como vivido':'Salvar experiência'}</button><button style="display:block;margin:12px auto 0;color:var(--coral);font-size:13px" onclick="del()">Remover</button></div></div>`}
+const live=()=>{S.sel.w='Já vivemos';S.sel.done=Date.now();save();go({sub:''})};
+const del=()=>{S.items=S.items.filter(i=>i!==S.sel);save();go({sub:''})};
+const WL=['Ideia aleatória','Seria legal','Queremos fazer','Queremos muito','PRECISAMOS FAZER ISSO'];
+const BUD=[['Até R$50',50],['R$50–100',100],['R$100–200',200],['R$200+',1e9],['Tanto faz',1e9]],BLO=[0,50,100,200];
+const TIME=[['Até 1h',1],['1–2h',2],['2–4h',3],['Meio período',4],['Dia inteiro',5],['Tanto faz',9]];
+const DUR=[['lt1h','Até 1h',1],['1-2h','1–2h',2],['2-4h','2–4h',3],['half','Meio período',4],['full','Dia inteiro',5]];
+function surprise(){go({sub:'sfilter',seen:[]})}
+function decide(){const f=S.sf,now=Date.now(),dy=t=>(now-t)/864e5,ceil=Math.min(BUD[f.b][1],f.low?50:1e9),tmax=TIME[f.t][1];
+let c=S.items.filter(i=>i.w!=='Já vivemos'||(i.done&&dy(i.done)>60));
+c=c.filter(i=>{const cost=i.cmax!=null?i.cmax:i.cmin,di=(DUR.find(d=>d[0]===i.dur)||[0,0,0])[2];return(cost==null||cost<=ceil)&&(!di||di<=tmax)});
+const sc=c.map(i=>{const cost=i.cmax!=null?i.cmax:i.cmin;let p=(i.want||3)*5+(i.imp||2)*4+Math.min(dy(Math.max(i.at||now,i.seen||0)),90)/9+((i.by||[]).length>1?5:0)+(i.w==='Planejado'?3:0);
+if(cost!=null){if(f.b<4&&!f.low&&cost>=BLO[f.b]&&cost<=BUD[f.b][1])p+=3;if(f.low)p+=cost===0?10:cost<=30?5:0}
+if(i.done)p-=6;return{i,p}}).sort((a,b)=>b.p-a.p).map(x=>x.i);
+let pool=sc.filter(i=>!S.seen.includes(i.id));if(!pool.length&&sc.length){S.seen=[];pool=sc}
+pool=pool.slice(0,3);const pk=pool[Math.floor(Math.random()*pool.length)];
+if(pk){S.seen.push(pk.id);go({sur:pk,sub:'surprise'})}else go({sur:null,sub:'snone'})}
+const dk0=(x)=>`<div class="top"><span class="hand" style="font-size:32px;font-style:italic;transform:rotate(-4deg)">NEXT LAP</span><button onclick="go({sub:''})">${ic('x')}</button></div>${dd('spark','82%','16%',24,'#fff')}${dd('star','6%','30%',20,'#fff')}${dd('spark','88%','38%',16,'#fff')}`;
+function sfilter(){const f=S.sf,ch=(a,k,cur)=>a.map((o,n)=>`<button class="dc ${cur===n?'on':''}" onclick="S.sf.${k}=${n};draw()">${o[0]}</button>`).join('');
+return `<div class="scr full dk" style="padding:24px;display:flex;flex-direction:column">${dk0()}<div class="hand" style="font-size:42px;line-height:1;margin:4px 0 26px;transform:rotate(-2deg)">Deixa o destino decidir.</div>
+<b style="font-size:14px">💰 Quanto queremos gastar?</b><div class="row" style="flex-wrap:wrap;gap:8px;margin:10px 0 22px">${ch(BUD,'b',f.b)}</div>
+<b style="font-size:14px">⏱️ Quanto tempo temos?</b><div class="row" style="flex-wrap:wrap;gap:8px;margin:10px 0 22px">${ch(TIME,'t',f.t)}</div>
+<button class="dc ${f.low?'on':''}" style="border-radius:14px;text-align:left;padding:12px 16px;width:100%" onclick="S.sf.low=!S.sf.low;draw()"><b>Low Cost</b><br><small style="opacity:.75">Prioriza experiências grátis ou baratinhas</small></button>
+<div style="flex:1"></div><button class="btn w" onclick="decide()">Deixa comigo</button></div>`}
+function surp(){const i=S.sur,d=Math.floor((Date.now()-(i.at||Date.now()))/864e5),lo=i.cmin,hi=i.cmax,v=hi!=null?hi:lo;
+const cost=v==null?'':v===0&&(lo==null||lo===0)?'De graça':lo!=null&&hi!=null&&lo!==hi?`R$${lo}–${hi}`:`R$${v}`,du=(DUR.find(x=>x[0]===i.dur)||[])[1]||'';
+const tag=t=>t?`<span class="dc" style="padding:6px 12px">${t}</span>`:'';
+return `<div class="scr full dk" style="padding:24px;display:flex;flex-direction:column;${i.p?`background:linear-gradient(#061F44cc,#061F44f2),url(${i.p}) center/cover`:''}">${dk0()}
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center"><div class="hand" style="font-size:26px;color:#aab8dd;transform:rotate(-3deg)">A próxima volta de vocês é...</div><div class="hand" style="font-size:54px;line-height:1;margin:6px 0 14px;transform:rotate(-3deg)">${esc(i.t)}</div>
+<div style="font-size:20px">${'🔥'.repeat(i.want||3)}</div><div style="font-size:13px;color:#dbe4ff;margin:2px 0 14px">${WL[(i.want||3)-1]}</div>
+<div class="row" style="flex-wrap:wrap;gap:8px">${tag(i.l?'📍 '+esc(i.l):'')}${tag(cost?'💸 '+cost:'')}${tag(du?'⏱️ '+du:'')}</div>
+<div style="font-size:13px;color:#b7c4e6;margin-top:18px;line-height:1.4">Vocês adicionaram essa ideia ${d<1?'hoje':'há '+d+(d===1?' dia':' dias')}.<br>Talvez seja hora.</div></div>
+<button class="btn w" onclick="S.sur.w='Planejado';S.sur.seen=Date.now();save();go({sub:'detail',sel:S.sur})">Vamos!</button>
+<button class="btn" style="background:transparent;border:1px solid #ffffff66;margin-top:10px" onclick="decide()">Outra</button>
+<button style="margin:14px auto 0;font-size:12px;color:#8fa0c8;text-decoration:underline" onclick="go({sub:'sfilter'})">Mudar condições</button></div>`}
+function snone(){const f=S.sf,empty=!S.items.length,fx=[];
+if(!empty){if(f.low)fx.push(['Desligar Low Cost','S.sf.low=false']);else if(f.b<4)fx.push([f.b===0?'Liberar até R$100':f.b===1?'Liberar até R$200':'Liberar qualquer valor','S.sf.b='+(f.b>=2?4:f.b+1)]);if(f.t<5)fx.push(['Liberar mais tempo','S.sf.t=5'])}
+return `<div class="scr full dk" style="padding:24px;display:flex;flex-direction:column">${dk0()}<div style="flex:1;display:flex;flex-direction:column;justify-content:center"><div class="hand" style="font-size:40px;line-height:1.05;transform:rotate(-2deg)">${empty?'Ainda não tem ideias por aqui.':'Hmm... com essas condições, encontramos poucas opções. 👀'}</div>${empty?'<div style="font-size:14px;color:#b7c4e6;margin-top:12px">Adicionem uma ideia e eu escolho a próxima volta.</div>':''}</div>
+${fx.map(([a,c])=>`<button class="btn w" style="margin-bottom:10px" onclick="${c};decide()">${a}</button>`).join('')}${empty?`<button class="btn w" onclick="go({sub:'add'})">Adicionar ideia</button>`:''}
+<button style="margin:8px auto 0;font-size:13px;color:#dbe4ff;text-decoration:underline" onclick="go({sub:'sfilter'})">Mudar condições</button></div>`}
+
+function appearance(){const rows=[['Home','Foto ou cor','home','go({sub:\'cover\'})'],['Mural','Foto ou textura','mural','go({tab:\'mural\',sub:\'\'})'],['Perfil da Evy','Foto ou cor','user','go({tab:\'profile\',who:\'E\',sub:\'\'})'],['Perfil do JP','Foto ou cor','user','go({tab:\'profile\',who:\'J\',sub:\'\'})']];
+return `<div class="scr paper">${back('','Aparência')}<b style="font-size:15px">Backgrounds</b><p style="font-size:12px;color:var(--mut);margin:4px 0 6px">Escolha como cada tela vai aparecer no seu app.</p>${rows.map(([a,b,i,f])=>`<button class="set" onclick="${f}"><span style="color:var(--navy);width:34px;height:34px;border-radius:50%;background:${i==='user'?'var(--lav)':'var(--steel)'};display:flex;align-items:center;justify-content:center">${ic(i)}</span><div><b>${a}</b><small>${b}</small></div>${ic('chev')}</button>`).join('')}
+<b style="display:block;margin:22px 0 2px;font-size:15px">Status dos perfis</b>${['E','J'].map(k=>`<div style="margin-top:10px"><small style="color:var(--mut)">${S.prof[k].n}</small><input class="field" maxlength="60" value="${esc(S.prof[k].s)}" oninput="S.prof['${k}'].s=this.value;save()"></div>`).join('')}</div>`}
+function splashBg(){const cs=['#061F44','#111111','#1f1736','#24324a','#3a1f2a','#203a32'];return `<div class="scr paper">${back('appearance','Tela inicial')}<div class="card" style="height:210px;margin-bottom:8px;background:${S.splashCover?'#111':(S.splashColor||'#061F44')};overflow:hidden"><div style="position:absolute;inset:0;${S.splashCover?`background:linear-gradient(#061F44aa,#061F4455),url(${S.splashCover}) center/cover no-repeat`:''}"></div><div class="hand" style="position:absolute;left:18px;top:36px;color:#fff;font-size:68px;line-height:.8;transform:rotate(-7deg);text-shadow:0 2px 10px #0005">NEXT<br>LAP</div><div style="position:absolute;right:18px;bottom:16px;color:#fff;font-size:11px">Prévia da entrada</div></div><p style="font-size:11.5px;color:var(--mut);margin-bottom:22px;text-align:center">Personalize a tela que aparece antes de vocês entrarem na Home.</p>${photo(S.splashCover,'splash','','Adicionar foto','height:110px;border-radius:8px;margin-bottom:18px')}<div class="row" style="justify-content:space-between;margin-bottom:8px"><b style="font-size:14px">Ou escolha uma cor</b><input type="color" value="${S.splashColor||'#061F44'}" onchange="S.splashColor=this.value;S.splashCover='';save();draw()" style="width:42px;height:32px;border:0;background:transparent;padding:0;cursor:pointer"></div><div class="sw">${cs.map(c=>`<span title="${c}" style="background:${c}${S.splashColor===c&&!S.splashCover?';box-shadow:0 0 0 2px var(--blue)':''}" onclick="S.splashColor='${c}';S.splashCover='';save();draw()"></span>`).join('')}</div>${S.splashCover?`<button class="btn o" style="margin-bottom:12px" onclick="S.splashCover='';save();draw()">Remover foto</button>`:''}<button class="btn" onclick="go({sub:'appearance'})">Salvar</button></div>`}
+function cover(){const cs=['#061F44','#4267FF','#7357C8','#C9C7F6','#DDE3F0','#FF6B6B'];
+return `<div class="scr paper">${back('appearance','Capa da Home')}<div class="card" style="height:210px;margin-bottom:8px;${S.ccolor?'background:'+S.ccolor:''}">${photo(S.cover,'cover','','Adicionar foto','position:absolute;inset:0;background-color:transparent;border:0')}</div>
+<p style="font-size:11.5px;color:var(--mut);margin-bottom:22px;text-align:center">Use uma foto sua para personalizar a capa da Home.</p><b style="font-size:14px">Ou escolha uma cor</b><div class="sw">${cs.map(c=>`<span style="background:${c}${S.ccolor===c?';box-shadow:0 0 0 2px var(--blue)':''}" onclick="S.ccolor='${c}';S.cover='';save();draw()"></span>`).join('')}</div><button class="btn" onclick="go({sub:'appearance'})">Salvar</button></div>`}
+
+function draw(){if(S.splash){$.innerHTML=splash();return}const s=S.sub;let h;
+if(s==='add')h=add();else if(s==='detail')h=detail();else if(s==='surprise')h=surp();else if(s==='sfilter')h=sfilter();else if(s==='snone')h=snone();else if(s==='activity')h=activity()+nav();else if(s==='appearance')h=appearance()+nav();else if(s==='cover')h=cover()+nav();else if(s==='splashBg')h=splashBg()+nav();else h=({home,mural,explore,profile}[S.tab])()+nav();
+$.innerHTML=h}
+draw();
+</script></body></html>
