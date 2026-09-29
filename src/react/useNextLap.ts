@@ -93,16 +93,19 @@ export function useNextLap() {
   }, [replaceRemoteState])
 
   useEffect(() => {
-    if (!supabase || !session || !currentUser) return
-    const channel = supabase
-      .channel('next-lap-live')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'experiences' }, () => { void replaceRemoteState() })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => { void replaceRemoteState() })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'completions' }, () => { void replaceRemoteState() })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, () => { void replaceRemoteState() })
-      .subscribe()
-    return () => { void supabase.removeChannel(channel) }
-  }, [session, currentUser, replaceRemoteState])
+  const client = supabase
+  if (!client || !session || !currentUser) return
+
+  const channel = client
+    .channel('next-lap-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'experiences' }, () => { void replaceRemoteState() })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => { void replaceRemoteState() })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'completions' }, () => { void replaceRemoteState() })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, () => { void replaceRemoteState() })
+    .subscribe()
+
+  return () => { void client.removeChannel(channel) }
+}, [session, currentUser, replaceRemoteState])
 
   const persistLocal = useCallback((updater: (current: LocalState) => LocalState) => {
     setData(current => {
